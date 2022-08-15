@@ -32,17 +32,37 @@
         </div>
         <div class="col-xxl-6 mt-2 mt-xxl-0">
             <div class="row">
-                <div class="col-5">
+                <div class="col-3">
                     <div class="h3">Speed</div>
                     <select id="speed" class="form-control form-control-sm">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option selected>3</option>
+                        <option>4</option>
+                        <option>5</option>
                     </select>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
+                    <div class="h3">Cells</div>
+                    <select id="cells" class="form-control form-control-sm">
+                        <option>8</option>
+                        <option>16</option>
+                        <option selected>24</option>
+                        <option>32</option>
+                        <option>40</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <div class="h3">Blocks</div>
+                    <select id="blocks" class="form-control form-control-sm">
+                        <option selected>0</option>
+                        <option>3</option>
+                        <option>7</option>
+                        <option>12</option>
+                        <option>18</option>
+                    </select>
+                </div>
+                <div class="col-3">
                     <div class="h3">Border</div>
                     <div class="form-check pt-1">
                         <input class="form-check-input" type="checkbox" id="border" checked>
@@ -50,16 +70,6 @@
                             Ignore
                         </label>
                     </div>
-                </div>
-                <div class="col-5">
-                    <div class="h3">Cells</div>
-                    <select id="cells" class="form-control form-control-sm">
-                        <option value="8">8</option>
-                        <option value="16">16</option>
-                        <option value="24" selected>24</option>
-                        <option value="32">32</option>
-                        <option value="40">40</option>
-                    </select>
                 </div>
             </div>
             <div class="row mt-3">
@@ -79,8 +89,9 @@
                         <tr>
                             <th>Date</th>
                             <th>Speed</th>
-                            <th>Border</th>
                             <th>Cells</th>
+                            <th>Blocks</th>
+                            <th>Border</th>
                             <th>Score</th>
                         </tr>
                         <tbody id="history"></tbody>

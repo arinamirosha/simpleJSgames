@@ -8,11 +8,12 @@ const $speed = document.getElementById('speed');
 const $cells = document.getElementById('cells');
 const $border = document.getElementById('border');
 const $history = document.getElementById('history');
+const $blocks = document.getElementById('blocks');
 
 const context = $canvas.getContext('2d');
-const minimizeCell = 1;
+const minimizeCell = 3;
 
-let count = 0, loopId, level, snake, apple, grid, countCells, borderIgnore;
+let count = 0, loopId, level, snake, apple, grid, countCells, borderIgnore, blocks;
 
 setCanvasGridCells();
 
@@ -26,46 +27,70 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function getFreeXY() {
+    let el = {
+        x: grid * getRandomInt(0, countCells),
+        y: grid * getRandomInt(0, countCells)
+    }, error = false;
+
+    //not block
+    blocks.forEach(b => {
+        if (b.x === el.x && b.y === el.y) {
+            error = true;
+        }
+    });
+
+    // not snake move line on begin
+    if (!snake.cells.length && (snake.dx && (el.y === snake.y) || snake.dy && (el.x === snake.x))) {
+        error = true;
+    }
+
+    // not snake for new apple
+    if (snake.cells.length) {
+        snake.cells.forEach(cell => {
+            if (cell.x === el.x && cell.y === el.y) {
+                error = true;
+            }
+        });
+    }
+
+    if (error) {
+        el = getFreeXY();
+    }
+
+    return el;
+}
+
+function drawBlocks() {
+    blocks.forEach(b => {
+        context.fillStyle = 'firebrick';
+        context.fillRect(b.x, b.y, grid, grid);
+        context.strokeRect(b.x, b.y, grid, grid);
+    })
+}
+
 function drawApple() {
     context.beginPath();
 
     context.fillStyle = 'gold';
-    context.arc(apple.x + grid / 2, apple.y + grid / 2, grid / 2 - minimizeCell, 0, 2 * Math.PI);
+    context.arc(apple.x + grid / 2, apple.y + grid / 2, grid / 2, 0, 2 * Math.PI);
     context.fill();
 
-    context.arc(apple.x + grid / 2, apple.y + grid / 2, grid / 2 - minimizeCell, 0, 2 * Math.PI);
+    context.arc(apple.x + grid / 2, apple.y + grid / 2, grid / 2, 0, 2 * Math.PI);
     context.stroke();
 
     context.closePath();
 }
 
 function drawSnake() {
-    // Обрабатываем каждый элемент змейки
     snake.cells.forEach(function (cell, index) {
-        // Рисуем элемент
         if (index) {
             context.fillStyle = 'PaleTurquoise';
         } else {
             context.fillStyle = 'DeepSkyBlue';
         }
-        context.fillRect(cell.x, cell.y, grid - minimizeCell, grid - minimizeCell);
-        context.strokeRect(cell.x, cell.y, grid - (minimizeCell * 2), grid - (minimizeCell * 2));
-
-        // Попали на яблоко
-        if (cell.x === apple.x && cell.y === apple.y) {
-            $score.innerText = parseInt($score.innerText) + 1;
-            checkAndSetRecord();
-            snake.maxCells++;
-            apple.x = grid * getRandomInt(0, countCells);
-            apple.y = grid * getRandomInt(0, countCells);
-        }
-
-        // Столкновние с собой
-        for (let i = index + 1; i < snake.cells.length; i++) {
-            if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-                stopGame();
-            }
-        }
+        context.fillRect(cell.x + (minimizeCell / 2), cell.y + (minimizeCell / 2), grid - minimizeCell, grid - minimizeCell);
+        context.strokeRect(cell.x + (minimizeCell / 2), cell.y + (minimizeCell / 2), grid - minimizeCell, grid - minimizeCell);
     });
 }
 
@@ -107,6 +132,29 @@ function loop() {
         snake.cells.pop();
     }
 
+    // Столкновение с препятствием
+    blocks.forEach(b => {
+        if (b.x === snake.x && b.y === snake.y) {
+            stopGame();
+        }
+    });
+
+    // Столкновение с собой
+    snake.cells.slice(1).forEach(cell => {
+        if (cell.x === snake.x && cell.y === snake.y) {
+            stopGame();
+        }
+    });
+
+    // Попали на яблоко
+    if (snake.x === apple.x && snake.y === apple.y) {
+        $score.innerText = parseInt($score.innerText) + 1;
+        checkAndSetRecord();
+        snake.maxCells++;
+        apple = getFreeXY();
+    }
+
+    drawBlocks();
     drawApple();
     drawSnake();
 }
@@ -150,6 +198,7 @@ $start.addEventListener('click', function (e) {
 
     $speed.disabled = true;
     $cells.disabled = true;
+    $blocks.disabled = true;
     $border.disabled = true;
 
     snake = {
@@ -160,10 +209,14 @@ $start.addEventListener('click', function (e) {
         cells: [],
         maxCells: 4
     };
-    apple = {
-        x: grid * getRandomInt(0, countCells),
-        y: grid * getRandomInt(0, countCells)
-    };
+    blocks = [];
+    let bs = parseInt($blocks.value);
+    if (bs) {
+        for (let i = 0; i < bs; i++) {
+            blocks.push(getFreeXY());
+        }
+    }
+    apple = getFreeXY();
 
     $score.innerText = 0;
     $start.classList.add('d-none');
@@ -188,6 +241,7 @@ function stopGame() {
 
     $speed.disabled = false;
     $cells.disabled = false;
+    $blocks.disabled = false;
     $border.disabled = false;
 
     $start.classList.remove('d-none');
@@ -258,8 +312,9 @@ function updateHistory(addNew = false) {
         let newData = {
             date: new Date().toISOString().slice(0, 10),
             speed: parseInt($speed.value),
-            border: $border.checked ? 'ignore' : ' no ignore',
             cells: parseInt($cells.value),
+            blocks: parseInt($blocks.value),
+            border: $border.checked ? 'ignore' : ' no ignore',
             score: parseInt($score.innerText),
         };
         if (historyStorage) {
@@ -278,8 +333,9 @@ function updateHistory(addNew = false) {
             historyHtml += `<tr>
                 <td>${h.date}</td>
                 <td>${h.speed}</td>
-                <td>${h.border}</td>
                 <td>${h.cells}</td>
+                <td>${h.blocks}</td>
+                <td>${h.border}</td>
                 <td>${h.score}</td>
             </tr>`;
         });
