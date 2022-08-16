@@ -11,7 +11,13 @@ const $history = document.getElementById('history');
 const $blocks = document.getElementById('blocks');
 
 const context = $canvas.getContext('2d');
-const minimizeCell = 3;
+
+const appleImg = new Image();
+const brickImg = new Image();
+const snakeHeadImg = new Image();
+appleImg.src = 'assets/img/apple.png';
+brickImg.src = 'assets/img/brick.png';
+snakeHeadImg.src = 'assets/img/snakeHead.png';
 
 let count = 0, loopId, level, snake, apple, grid, countCells, borderIgnore, blocks;
 
@@ -61,36 +67,66 @@ function getFreeXY() {
     return el;
 }
 
-function drawBlocks() {
-    blocks.forEach(b => {
-        context.fillStyle = 'firebrick';
-        context.fillRect(b.x, b.y, grid, grid);
-        context.strokeRect(b.x, b.y, grid, grid);
-    })
-}
-
-function drawApple() {
-    context.beginPath();
-
-    context.fillStyle = 'gold';
-    context.arc(apple.x + grid / 2, apple.y + grid / 2, grid / 2, 0, 2 * Math.PI);
-    context.fill();
-
-    context.arc(apple.x + grid / 2, apple.y + grid / 2, grid / 2, 0, 2 * Math.PI);
-    context.stroke();
-
-    context.closePath();
-}
-
-function drawSnake() {
-    snake.cells.forEach(function (cell, index) {
-        if (index) {
-            context.fillStyle = 'PaleTurquoise';
-        } else {
-            context.fillStyle = 'DeepSkyBlue';
+function drawCells() {
+    let wh = grid * countCells;
+    for (let x = 0; x < wh; x = x + grid) {
+        for (let y = 0; y < wh; y = y + grid) {
+            if (x % 2 === 0 && y % 2 !== 0 || y % 2 === 0 && x % 2 !== 0) {
+                context.fillStyle = '#bee0c1';
+            } else {
+                context.fillStyle = '#d6efd8';
+            }
+            context.fillRect(x, y, grid, grid);
         }
-        context.fillRect(cell.x + (minimizeCell / 2), cell.y + (minimizeCell / 2), grid - minimizeCell, grid - minimizeCell);
-        context.strokeRect(cell.x + (minimizeCell / 2), cell.y + (minimizeCell / 2), grid - minimizeCell, grid - minimizeCell);
+    }
+}
+
+function drawGame() {
+    drawCells();
+
+    // bricks
+    blocks.forEach(b => {
+        context.drawImage(brickImg, b.x, b.y, grid, grid);
+    })
+
+    // apple
+    context.drawImage(appleImg, apple.x, apple.y, grid, grid);
+
+    // snake
+    snake.cells.forEach(function (cell, index) {
+        // body
+        if (index) {
+            let minimizeCell = getRandomInt(3, parseInt(grid / 4));
+            context.beginPath();
+            context.fillStyle = 'white';
+            context.strokeStyle = '#3e3e3e';
+            context.shadowColor = '#b3b3b3';
+            context.shadowBlur = '5';
+            context.arc(cell.x + grid / 2, cell.y + grid / 2, (grid - minimizeCell) / 2, 0, 2 * Math.PI);
+            context.fill();
+            context.stroke();
+            context.closePath();
+            context.shadowColor = 'rgba(0,0,0,0)';
+        }
+        // head
+        else {
+            if (snake.dy) {
+                context.translate(cell.x + grid / 2, cell.y + grid / 2);
+                context.rotate((snake.dy < 0 ? 1 : 135) * Math.PI / 2); // up or down
+                context.translate(-cell.x - grid / 2, -cell.y - grid / 2);
+                context.drawImage(snakeHeadImg, cell.x, cell.y, grid, grid);
+                context.setTransform(1, 0, 0, 1, 0, 0);
+            } else if (snake.dx > 0) {
+                // right
+                context.save();
+                context.scale(-1, 1);
+                context.drawImage(snakeHeadImg, -cell.x, cell.y, -grid, grid);
+                context.restore();
+            } else {
+                // left
+                context.drawImage(snakeHeadImg, cell.x, cell.y, grid, grid);
+            }
+        }
     });
 }
 
@@ -154,9 +190,7 @@ function loop() {
         apple = getFreeXY();
     }
 
-    drawBlocks();
-    drawApple();
-    drawSnake();
+    drawGame();
 }
 
 document.addEventListener('keydown', function (e) {
@@ -287,7 +321,7 @@ function getGridByCells(cells) {
         case 8:
             return 75;
         case 16:
-            return 38;
+            return 37;
         case 24:
             return 25;
         case 32:
@@ -304,6 +338,7 @@ function setCanvasGridCells() {
     grid = getGridByCells(countCells);
     $canvas.setAttribute('width', (grid * countCells).toString());
     $canvas.setAttribute('height', (grid * countCells).toString());
+    drawCells();
 }
 
 function updateHistory(addNew = false) {
