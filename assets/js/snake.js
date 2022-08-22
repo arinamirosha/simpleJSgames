@@ -29,10 +29,6 @@ addEventListener('load', (event) => {
     updateHistory();
 });
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
 function getFreeXY() {
     let el = {
         x: grid * getRandomInt(0, countCells),
@@ -313,23 +309,6 @@ function getLevelBySpeed(valSpeed) {
             return 4;
         default:
             return 11;
-    }
-}
-
-function getGridByCells(cells) {
-    switch (cells) {
-        case 8:
-            return 75;
-        case 16:
-            return 37;
-        case 24:
-            return 25;
-        case 32:
-            return 19;
-        case 40:
-            return 15;
-        default:
-            return 25;
     }
 }
 

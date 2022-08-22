@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <title>Snake</title>
@@ -19,7 +20,7 @@
     <div class="row bg-light p-3">
         <div class="col-xxl-6">
             <div class="position-relative">
-                <canvas id="game" class="border  border-3"></canvas>
+                <canvas id="game" class="border  border-3" height="600" width="600"></canvas>
                 <div id="message"
                      class="display-1 fw-semibold d-flex justify-content-center align-items-center position-absolute w-100 h-100"
                      style="top:0;left:0;">
@@ -97,7 +98,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row bg-light p-4 mt-2 justify-content-around">
         <div class="col-1"><img src="assets/img/apple.png" alt="" class="w-100"></div>
         <div class="col-1 align-self-end"><img src="assets/img/apple.png" alt="" class="w-75"></div>
@@ -106,6 +107,9 @@
     </div>
 </div>
 
+<script src="assets/js/common.js"></script>
 <script src="assets/js/snake.js"></script>
 
 </body>
+
+</html>
