@@ -7,103 +7,109 @@
 
 <body class="bg-secondary">
 
-<div class="container text-center p-2">
-    <div class="row h1 bg-light p-2">
-        <div class="col-6">
-            Score: <span id="score">0</span>
-        </div>
-        <div class="col-6">
-            Record: <span id="record"></span>
-        </div>
+<div class="row text-center my-2 mx-auto">
+    <div class="col-12 col-xxl-1">
+        <a class="btn btn-light d-block mb-2" href="index.html"><- Back</a>
     </div>
 
-    <div class="row bg-light p-3">
-        <div class="col-xxl-6">
-            <div class="position-relative">
-                <canvas id="game" class="border  border-3" height="600" width="600"></canvas>
-                <div id="message"
-                     class="display-1 fw-semibold d-flex justify-content-center align-items-center position-absolute w-100 h-100"
-                     style="top:0;left:0;">
-                    Start game
-                </div>
+    <div class="col-12 col-xxl-10">
+        <div class="row h1 bg-light p-2">
+            <div class="col-6">
+                Score: <span id="score">0</span>
+            </div>
+            <div class="col-6">
+                Record: <span id="record"></span>
             </div>
         </div>
-        <div class="col-xxl-6 mt-2 mt-xxl-0">
-            <div class="row">
-                <div class="col-3">
-                    <div class="h3">Speed</div>
-                    <select id="speed" class="form-control form-control-sm">
-                        <option>1</option>
-                        <option>2</option>
-                        <option selected>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <div class="h3">Cells</div>
-                    <select id="cells" class="form-control form-control-sm">
-                        <option>8</option>
-                        <option>16</option>
-                        <option selected>24</option>
-                        <option>32</option>
-                        <option>40</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <div class="h3">Blocks</div>
-                    <select id="blocks" class="form-control form-control-sm">
-                        <option selected>0</option>
-                        <option>3</option>
-                        <option>7</option>
-                        <option>12</option>
-                        <option>18</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <div class="h3">Border</div>
-                    <div class="form-check pt-1">
-                        <input class="form-check-input" type="checkbox" id="border" checked>
-                        <label class="form-check-label" for="border">
-                            Ignore
-                        </label>
+
+        <div class="row bg-light p-3">
+            <div class="col-xxl-6">
+                <div class="position-relative">
+                    <canvas id="game" class="border  border-3" height="600" width="600"></canvas>
+                    <div id="message"
+                         class="display-1 fw-semibold d-flex justify-content-center align-items-center position-absolute w-100 h-100"
+                         style="top:0;left:0;">
+                        Start game
                     </div>
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <button class="btn btn-primary btn-lg col-6" id="start" data-pause="off">Start</button>
-                    <button class="btn btn-danger btn-lg col-6 d-none" id="stop">Stop</button>
+            <div class="col-xxl-6 mt-2 mt-xxl-0">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="h3">Speed</div>
+                        <select id="speed" class="form-control form-control-sm">
+                            <option>1</option>
+                            <option>2</option>
+                            <option selected>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <div class="h3">Cells</div>
+                        <select id="cells" class="form-control form-control-sm">
+                            <option>8</option>
+                            <option>16</option>
+                            <option selected>24</option>
+                            <option>32</option>
+                            <option>40</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <div class="h3">Blocks</div>
+                        <select id="blocks" class="form-control form-control-sm">
+                            <option selected>0</option>
+                            <option>3</option>
+                            <option>7</option>
+                            <option>12</option>
+                            <option>18</option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <div class="h3">Border</div>
+                        <div class="form-check pt-1">
+                            <input class="form-check-input" type="checkbox" id="border" checked>
+                            <label class="form-check-label" for="border">
+                                Ignore
+                            </label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <hr/>
-            <div class="row h1">
-                <div class="col-12">Top 7</div>
-            </div>
-            <hr/>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Date</th>
-                            <th>Speed</th>
-                            <th>Cells</th>
-                            <th>Blocks</th>
-                            <th>Border</th>
-                            <th>Score</th>
-                        </tr>
-                        <tbody id="history"></tbody>
-                    </table>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button class="btn btn-primary btn-lg col-6" id="start" data-pause="off">Start</button>
+                        <button class="btn btn-danger btn-lg col-6 d-none" id="stop">Stop</button>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row h1">
+                    <div class="col-12">Top 7</div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-hover">
+                            <tr>
+                                <th>Date</th>
+                                <th>Speed</th>
+                                <th>Cells</th>
+                                <th>Blocks</th>
+                                <th>Border</th>
+                                <th>Score</th>
+                            </tr>
+                            <tbody id="history"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row bg-light p-4 mt-2 justify-content-around">
-        <div class="col-1"><img src="assets/img/apple.png" alt="" class="w-100"></div>
-        <div class="col-1 align-self-end"><img src="assets/img/apple.png" alt="" class="w-75"></div>
-        <div class="col-1 align-self-center"><img src="assets/img/apple.png" alt="" class="w-50"></div>
-        <div class="col-2"><img src="assets/img/snake.png" alt="" class="w-100"></div>
+        <div class="row bg-light p-4 mt-2 justify-content-around">
+            <div class="col-1"><img src="assets/img/apple.png" alt="" class="w-100"></div>
+            <div class="col-1 align-self-end"><img src="assets/img/apple.png" alt="" class="w-75"></div>
+            <div class="col-1 align-self-center"><img src="assets/img/apple.png" alt="" class="w-50"></div>
+            <div class="col-2"><img src="assets/img/snake.png" alt="" class="w-100"></div>
+        </div>
     </div>
 </div>
 

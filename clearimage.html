@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <title>Labyrinth</title>
+    <title>Clear Image</title>
 </head>
-
 <body class="bg-secondary">
 
 <div class="row text-center my-2 mx-auto">
@@ -29,11 +29,11 @@
                     <div class="col-6">
                         <div class="h3">Cells</div>
                         <select id="cells" class="form-control form-control-sm">
+                            <option>8</option>
                             <option>16</option>
-                            <option>24</option>
-                            <option selected>32</option>
+                            <option selected>24</option>
+                            <option>32</option>
                             <option>40</option>
-                            <option>48</option>
                         </select>
                     </div>
                 </div>
@@ -50,15 +50,17 @@
             </div>
         </div>
 
-        <div class="row bg-light p-4 mt-2">
-            <canvas id="designCanvas" height="80" class="border border-3" width="600"></canvas>
+        <div class="row bg-light p-4 mt-2 justify-content-around">
+            <div class="col-2"><img src="assets/img/flower.png" alt="" class="w-75"></div>
+            <div class="col-2"><img src="assets/img/flower.png" alt="" class="w-75"></div>
+            <div class="col-2"><img src="assets/img/flower.png" alt="" class="w-75"></div>
+            <div class="col-2"><img src="assets/img/flower.png" alt="" class="w-75"></div>
         </div>
     </div>
 </div>
 
 <script src="assets/js/common.js"></script>
-<script src="assets/js/labyrinth.js"></script>
+<script src="assets/js/clearimage.js"></script>
 
 </body>
-
 </html>

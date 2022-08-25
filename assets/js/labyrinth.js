@@ -305,6 +305,7 @@ function drawWay() {
 }
 
 function endGame(win = false) {
+    clearInterval(timer);
     if (win) {
         $message.innerText = 'Congratulations!';
         $message.classList.remove('text-danger');
@@ -314,12 +315,10 @@ function endGame(win = false) {
         $message.classList.remove('text-primary');
         $message.classList.add('text-danger');
     }
-    clearInterval(timer);
-    timer = null;
-    $start.classList.remove('disabled');
     $message.classList.remove('d-none');
     $start.classList.remove('d-none');
     $stop.classList.add('d-none');
+    $cells.disabled = false;
 }
 
 function designCanvasContext() {
@@ -382,6 +381,7 @@ $start.addEventListener('click', function (e) {
     $stop.classList.remove('d-none');
     $timer.innerText = 0;
     $message.classList.add('d-none');
+    $cells.disabled = true;
 
     finished = false;
     gameOver = false;
