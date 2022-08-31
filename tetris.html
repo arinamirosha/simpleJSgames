@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <title>Tetris</title>
+</head>
+<body class="bg-secondary">
+
+<div class="row text-center my-2 mx-auto">
+    <div class="col-12 col-xxl-1">
+        <a class="btn btn-light d-block mb-2" href="index.html"><- Back</a>
+    </div>
+
+    <div class="col-12 col-xxl-10">
+        <div class="row bg-light p-3">
+            <div class="col-lg-7">
+                <div class="position-relative">
+                    <canvas id="game" class="border border-3" height="600" width="400"></canvas>
+                    <div id="message"
+                         class="display-1 fw-semibold d-flex justify-content-center align-items-center position-absolute w-100 h-100"
+                         style="top:0;left:0;">
+                        Start game
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 mt-2 mt-xxl-0">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <div class="h3">Speed</div>
+                        <select id="speed" class="form-control form-control-sm">
+                            <option>1</option>
+                            <option selected>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3 justify-content-center">
+                    <button class="btn btn-primary btn-lg col-6" id="start">Start</button>
+                    <button class="btn btn-danger btn-lg col-6 d-none" id="stop">Stop</button>
+                </div>
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-6">
+                        <div class="h3">Lines</div>
+                        <div class="h3" id="lines">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row bg-light p-4 mt-2 justify-content-around">
+            <div class="col-2"><img src="assets/img/tetris.png" alt="" class="w-75"></div>
+            <div class="col-2"><img src="assets/img/tetris.png" alt="" class="w-75"></div>
+            <div class="col-2"><img src="assets/img/tetris.png" alt="" class="w-75"></div>
+            <div class="col-2"><img src="assets/img/tetris.png" alt="" class="w-75"></div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/common.js"></script>
+<script src="assets/js/tetris.js"></script>
+
+</body>
+</html>

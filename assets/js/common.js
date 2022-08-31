@@ -20,3 +20,22 @@ function getGridByCells(cells) {
             return 25;
     }
 }
+
+function getLevelBySpeed(valSpeed) {
+    switch (valSpeed) {
+        case 1:
+            return 18;
+        case 2:
+            return 14;
+        case 3:
+            return 10;
+        case 4:
+            return 7;
+        case 5:
+            return 4;
+        case 6:
+            return 2;
+        default:
+            return 11;
+    }
+}

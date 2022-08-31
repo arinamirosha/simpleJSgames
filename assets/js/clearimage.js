@@ -21,6 +21,7 @@ $canvas.addEventListener("mousemove", function (e) {
             }
             squares.splice(i, 1);
             if (!squares.length) {
+                context.clearRect(0, 0, wh, wh);
                 endGame(true);
             }
         }

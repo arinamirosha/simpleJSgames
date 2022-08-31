@@ -295,23 +295,6 @@ function checkAndSetRecord() {
     }
 }
 
-function getLevelBySpeed(valSpeed) {
-    switch (valSpeed) {
-        case 1:
-            return 18;
-        case 2:
-            return 14;
-        case 3:
-            return 10;
-        case 4:
-            return 7;
-        case 5:
-            return 4;
-        default:
-            return 11;
-    }
-}
-
 function setCanvasGridCells() {
     countCells = parseInt($cells.value);
     grid = getGridByCells(countCells);
