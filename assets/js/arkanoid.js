@@ -16,7 +16,7 @@ const startY = height - elSize * 1.5;
 $canvas.setAttribute('width', width.toString());
 $canvas.setAttribute('height', height.toString());
 
-let loopId, currentRound, player, ball, curStartX, curHeightY;
+let loopId, currentRound, player, ball, curStartX, curHeightY, curFall = null;
 
 $start.addEventListener('click', function (e) {
     setRound(1);
@@ -72,7 +72,7 @@ function loop() {
         ball.y += changeY * ball.dy;
         curHeightY += changeY;
         if (ball.y <= 0 ||
-            ball.y === startY && ball.x >= player.x - halfSize && ball.x <= player.x + player.len + halfSize
+            ball.y === startY && ball.x >= player.x - halfSize && ball.x + elSize <= player.x + player.len + halfSize
         ) {
             ball.dy *= -1;
             // change angle according there touched player
@@ -86,18 +86,51 @@ function loop() {
 
         // round
         currentRound.forEach((cr, index) => {
+            let splice = false;
             if (Math.ceil(ball.x) + elSize === cr.x && ball.y + elSize > cr.y && ball.y < cr.y + elSize ||
                 Math.ceil(ball.x) === cr.x + elSize * 2 && ball.y + elSize > cr.y && ball.y < cr.y + elSize) {
                 curStartX = ball.x;
                 curHeightY = 0;
                 ball.angle = -ball.angle;
-                currentRound.splice(index, 1);
+                splice = true;
             } else if (ball.x + elSize > cr.x && ball.x < cr.x + elSize * 2 && Math.ceil(ball.y) === cr.y + elSize && ball.dy === -1 ||
                 ball.x + elSize > cr.x && ball.x < cr.x + elSize * 2 && Math.ceil(ball.y) + elSize === cr.y && ball.dy === 1) {
                 ball.dy *= -1;
+                splice = true;
+            }
+            if (splice) {
+                if (cr.type) {
+                    switch (cr.type) {
+                        case 'smaller':
+                            cr.color = 'darksalmon';
+                            break;
+                        case 'larger':
+                            cr.color = 'lightgreen';
+                            break;
+                    }
+                    curFall = cr;
+                }
                 currentRound.splice(index, 1);
             }
         });
+
+        // falling
+        if (curFall) {
+            curFall.y += halfSize / 5;
+            if (curFall.y === startY && curFall.x >= player.x - elSize && curFall.x + elSize * 2 <= player.x + player.len + elSize) {
+                switch (curFall.type) {
+                    case 'smaller':
+                        player.len -= elSize;
+                        break;
+                    case 'larger':
+                        player.len += elSize;
+                        break;
+                }
+                curFall = null;
+            } else if (curFall.y >= height) {
+                curFall = null;
+            }
+        }
 
         // border
         if (ball.x + elSize >= width) {
@@ -150,6 +183,11 @@ function drawGame() {
     context.arc(ball.x + halfSize, ball.y + halfSize, halfSize, 0, 2 * Math.PI);
     context.fill();
     context.closePath();
+    // falling
+    if (curFall) {
+        context.fillStyle = curFall.color;
+        context.fillRect(curFall.x, curFall.y, elSize * 2, elSize);
+    }
 }
 
 function drawPlayer(clearBefore) {
@@ -207,7 +245,13 @@ function getRounds() {
     // round 1
     for (let x = 0; x < width; x += elSize * 2) {
         round1.push({x, y: elSize * 2, color: 'purple'});
-        round1.push({x, y: elSize * 7, color: 'orange'});
+        if (x === width / 2 + elSize * 4) {
+            round1.push({x, y: elSize * 7, color: 'orange', type: 'smaller'});
+        } else if (x === width / 2 - elSize * 8) {
+            round1.push({x, y: elSize * 7, color: 'orange', type: 'larger'});
+        } else {
+            round1.push({x, y: elSize * 7, color: 'orange'});
+        }
         if (x > elSize * 5 && x < width / 2 - elSize * 6 || x < width - elSize * 6 && x > width / 2 + elSize * 5) {
             round1.push({x, y: elSize * 11, color: 'black'});
             round1.push({x, y: elSize * 11, color: 'black'});
@@ -220,7 +264,7 @@ function getRounds() {
         if (x === width / 2 - elSize * 2) {
             round2.push({x, y: elSize * 2, color: 'brown'});
             round2.push({x, y: elSize * 8, color: 'black'});
-            round2.push({x, y: elSize * 8, color: 'black'});
+            round2.push({x, y: elSize * 8, color: 'black', type: 'larger'});
         }
         if (x > width / 2 - elSize * 5 && x < width / 2 + elSize * 2) {
             round2.push({x, y: elSize * 3, color: 'brown'});
@@ -230,17 +274,25 @@ function getRounds() {
             round2.push({x, y: elSize * 4, color: 'brown'});
             round2.push({x, y: elSize * 12, color: 'brown'});
         }
-        if (x > width / 2 - elSize * 9 && x < width / 2 + elSize * 5) {
+        if (x > width / 2 - elSize * 9 && x < width / 2 + elSize * 6) {
             round2.push({x, y: elSize * 5, color: 'brown'});
             round2.push({x, y: elSize * 11, color: 'brown'});
         }
         if (x > width / 2 - elSize * 11 && x < width / 2 + elSize * 8) {
-            round2.push({x, y: elSize * 6, color: 'brown'});
+            if (x === width / 2 + elSize * 4 || x === width / 2 - elSize * 4) {
+                round2.push({x, y: elSize * 6, color: 'brown', type: 'smaller'});
+            } else {
+                round2.push({x, y: elSize * 6, color: 'brown'});
+            }
             round2.push({x, y: elSize * 10, color: 'brown'});
         }
         if (x > width / 2 - elSize * 13 && x < width / 2 + elSize * 10) {
             round2.push({x, y: elSize * 7, color: 'brown'});
-            round2.push({x, y: elSize * 9, color: 'brown'});
+            if (x === width / 2 - elSize * 10) {
+                round2.push({x, y: elSize * 9, color: 'brown', type: 'larger'});
+            } else {
+                round2.push({x, y: elSize * 9, color: 'brown'});
+            }
         }
     }
     rounds.push(round2);
@@ -248,10 +300,18 @@ function getRounds() {
     // round 3
     for (let x = 0; x < width; x += elSize * 2) {
         round3.push({x, y: elSize * 2, color: 'blue'});
-        round3.push({x, y: elSize * 9, color: 'yellow'});
+        if (x === width / 2 - elSize * 14 || x === width / 2 || x === width / 2 + elSize * 6) {
+            round3.push({x, y: elSize * 9, color: 'yellow', type: 'smaller'});
+        } else {
+            round3.push({x, y: elSize * 9, color: 'yellow'});
+        }
         if (x % 3) {
             round3.push({x, y: elSize * 3, color: 'black'});
-            round3.push({x, y: elSize * 3, color: 'black'});
+            if (x === width / 2 - elSize * 8) {
+                round3.push({x, y: elSize * 3, color: 'black', type: 'larger'});
+            } else {
+                round3.push({x, y: elSize * 3, color: 'black'});
+            }
         }
         if (x % 4) {
             round3.push({x: x < width / 2 ? x - elSize * 2 : x, y: elSize * 6, color: 'yellow'});
